@@ -21,6 +21,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Score", style: .done, target: self, action: #selector(scoreAlert))
+        
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
         
         button1.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
@@ -79,12 +81,29 @@ class ViewController: UIViewController {
         ac.addAction(UIAlertAction(title: ((questionCount == questionMax) ? "Reset Game" : "Continue"), style: ((questionCount == questionMax) ? .default : .cancel), handler: askQuestion))
         
         present(ac, animated: true)
+//        scoreAlert(additionalText: additionalText, title: title)
     }
     
     func gameReset(action: UIAlertAction! = nil) {
         score = 0
         correctAnswer = 0
         questionCount = 0
+        askQuestion()
+    }
+    
+//    @objc func shareTapped() {
+//        let vc = UIActivityViewController(activityItems: [image, selectedImage.0 ?? "Image"], applicationActivities: [])
+//        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+//        present(vc, animated: true)
+//    }
+    
+    @objc func scoreAlert() {
+        let ac = UIAlertController(title: "Your score is", message: "\(score)", preferredStyle: .alert)
+        
+        ac.addAction(UIAlertAction(title: "Close", style: .default))
+        ac.addAction(UIAlertAction(title: "Restart", style: .destructive, handler: gameReset))
+        
+        present(ac, animated: true)
     }
 }
 
