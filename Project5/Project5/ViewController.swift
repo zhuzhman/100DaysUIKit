@@ -29,6 +29,7 @@ class ViewController: UITableViewController {
         
         startGame()
     }
+    
     @objc func startGame() {
         title = allWords.randomElement()
         usedWords.removeAll(keepingCapacity: true)
@@ -64,43 +65,40 @@ class ViewController: UITableViewController {
         
 //        let errorTitle: String
 //        let errorMessage: String
-        let result: (Bool, String, String)
         
+        let validations: [(String) -> (Bool, String, String)] = [isPossible, isOriginal, isReal, isShort, isTheSame]
+        validate(lowerAnswer: lowerAnswer, using: validations)
+        /*
         if !isPossible(word: lowerAnswer).0 {
-            result = isPossible(word: lowerAnswer)
+            let result = isPossible(word: lowerAnswer)
             showErrorMessage(errorTitle: result.1, errorMessage: result.2)
             return
         }
         
         if !isOriginal(word: lowerAnswer).0 {
-            result = isOriginal(word: lowerAnswer)
+            let result = isOriginal(word: lowerAnswer)
             showErrorMessage(errorTitle: result.1, errorMessage: result.2)
             return
         }
         
         if !isReal(word: lowerAnswer).0 {
-            result = isReal(word: lowerAnswer)
+            let result = isReal(word: lowerAnswer)
             showErrorMessage(errorTitle: result.1, errorMessage: result.2)
             return
         }
         
         if !isShort(word: lowerAnswer).0 {
-            result = isShort(word: lowerAnswer)
+            let result = isShort(word: lowerAnswer)
             showErrorMessage(errorTitle: result.1, errorMessage: result.2)
             return
         }
         
         if !isTheSame(word: lowerAnswer).0 {
-            result = isTheSame(word: lowerAnswer)
+            let result = isTheSame(word: lowerAnswer)
             showErrorMessage(errorTitle: result.1, errorMessage: result.2)
             return
         }
-        usedWords.insert(answer, at: 0)
-        
-        let indexPath = IndexPath(row: 0, section: 0)
-        tableView.insertRows(at: [indexPath], with: .automatic)
-        
-        return
+        */
 //        if isPossible(word: lowerAnswer) {
 //            if isOriginal(word: lowerAnswer) {
 //                if isReal(word: lowerAnswer) {
@@ -142,7 +140,7 @@ class ViewController: UITableViewController {
     }
     
     func isOriginal(word: String) -> (Bool, String, String) {
-        return (!usedWords.contains(word), "Original Word", "You cannot use the same word as the orginal one!")
+        return (!usedWords.contains(word.lowercased()), "Original Word", "You cannot use words that were already used.")
     }
     
     func isReal(word: String) -> (Bool, String, String) {
@@ -159,6 +157,19 @@ class ViewController: UITableViewController {
     
     func isTheSame(word: String) -> (Bool, String, String) {
         return (word != title, "The Same as Original", "The target word should be differrent from the original one.")
+    }
+    
+    func validate(lowerAnswer: String, using validations: [(String) -> (Bool, String, String)]) {
+        for validation in validations {
+            if !validation(lowerAnswer).0 {
+                showErrorMessage(errorTitle: validation(lowerAnswer).1, errorMessage: validation(lowerAnswer).2)
+                return
+            }
+        }
+        usedWords.insert(lowerAnswer, at: 0)
+        
+        let indexPath = IndexPath(row: 0, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
     }
     
     func showErrorMessage(errorTitle: String, errorMessage: String) {
