@@ -31,11 +31,11 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         cell.name.text = person.name
         
         let path = getDocumentDirectory().appendingPathComponent(person.image)
-        cell.ImageView.image = UIImage(contentsOfFile: path.path)
+        cell.imageView.image = UIImage(contentsOfFile: path.path)
         
-        cell.ImageView.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
-        cell.ImageView.layer.borderWidth = 2
-        cell.ImageView.layer.cornerRadius = 3
+        cell.imageView.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
+        cell.imageView.layer.borderWidth = 2
+        cell.imageView.layer.cornerRadius = 3
         cell.layer.cornerRadius = 7
         
         return cell
